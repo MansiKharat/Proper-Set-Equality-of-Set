@@ -1,0 +1,59 @@
+/* === Styling for the result box that displays output === */
+.result {
+  margin-top: 15px;                  /* Adds 15px space above the result area */
+  padding: 12px;                     /* Adds 12px padding inside the box for breathing room */
+  border-radius: 10px;               /* Rounds the corners of the result box */
+  background: rgba(255, 255, 255, 0.15); /* Gives a semi-transparent white background so the content behind is slightly visible */
+  color: white;                      /* Sets text color to white for better contrast */
+  font-size: 1.1em;                  /* Slightly increases font size to make it more readable */
+  text-align: center;                /* Centers all text inside the result box */
+  animation: fadeIn 0.6s ease-in-out; /* Applies the fadeIn animation lasting 0.6 seconds with a smooth in/out motion */
+}
+
+/* === Defines the fade-in animation for smooth appearance === */
+@keyframes fadeIn {
+  from { 
+    opacity: 0;                      /* Starts invisible (fully transparent) */
+    transform: translateY(10px);     /* Starts slightly shifted down by 10px */
+  }
+  to { 
+    opacity: 1;                      /* Ends fully visible */
+    transform: translateY(0);        /* Moves back to its original position */
+  }
+}
+
+/* === Adds smooth hover effects to all buttons === */
+button {
+  transition: all 0.3s ease;         /* Makes all style changes (like color, size) animate smoothly over 0.3 seconds */
+}
+
+/* === Button hover state === */
+button:hover {
+  background-color: #ffcd00;         /* Changes button background color to bright yellow when hovered */
+  transform: scale(1.05);            /* Slightly increases button size for a “pop” effect */
+}
+
+/* === Input box focus styling === */
+input:focus {
+  outline: none;                     /* Removes the default browser blue outline around inputs */
+  box-shadow: 0 0 8px #ffd43b;       /* Adds a soft yellow glow around the input when active (focused) */
+}
+
+/* === Styling for the “What is this?” information button === */
+.info-btn {
+  background-color: #ffd43b;         /* Gives it a bright yellow background */
+  color: #333;                       /* Sets text color to dark gray for readability */
+  border: none;                      /* Removes the button border for a flat modern look */
+  padding: 8px 15px;                 /* Adds spacing inside the button (8px top/bottom, 15px left/right) */
+  border-radius: 6px;                /* Slightly rounds the corners */
+  font-weight: bold;                 /* Makes the button text bold */
+  cursor: pointer;                   /* Changes cursor to a pointer when hovered to show it’s clickable */
+  transition: 0.3s;                  /* Smoothly animates any hover changes over 0.3 seconds */
+  margin-bottom: 15px;               /* Adds some space below the button */
+}
+
+/* === Hover effect for the info button === */
+.info-btn:hover {
+  background-color: #ffe066;         /* Lightens the yellow background when hovered */
+  transform: scale(1.05);            /* Slightly enlarges the button for a subtle animation */
+}

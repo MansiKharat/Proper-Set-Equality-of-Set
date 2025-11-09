@@ -1,0 +1,146 @@
+<!DOCTYPE html>  
+<!-- Declares this file as an HTML5 document -->
+
+<html lang="en">  
+<!-- The main HTML element. 'lang="en"' tells browsers and search engines the page language is English. -->
+
+<head>
+    <meta charset="UTF-8">  
+    <!-- Sets the character encoding to UTF-8 so all symbols and characters display correctly -->
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">  
+    <!-- Makes the website responsive on phones and tablets by adjusting to screen width -->
+
+    <title>Power Set & Equality Visualizer</title>  
+    <!-- The title shown in the browser tab -->
+
+    <!-- Links the external CSS file stored in the static folder -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <!-- 'url_for' is a Flask function that generates the correct URL to your static files -->
+</head>
+
+<body>
+    <!-- Main visible content of the webpage starts here -->
+
+    <div class="container">
+        <!-- A wrapper div for all content to center and style it nicely -->
+
+        <h1>Power Set & Equality Visualizer</h1>
+        <!-- The main heading of the web page -->
+
+        <!-- Button that shows or hides the info box when clicked -->
+        <button class="info-btn" onclick="toggleInfo()">❓ What is this?</button>
+
+        <!-- Hidden information box that explains the concepts -->
+        <div id="infoBox" class="intro" style="display: none;">
+            <!-- Initially hidden using inline style (display: none) -->
+            <p>
+                This simple tool helps you explore two ideas from Discrete mathematics:
+                <br><br>
+                <strong>Power Set:</strong> All possible combinations (subsets) of a given set of elements.
+                <br>
+                Example: For {1,2}, the power set is [[], [1], [2], [1,2]].
+                <br><br>
+                <strong>Set Equality:</strong> Two sets are equal if they contain exactly the same elements,
+                no matter the order.
+                <br>
+                Example: {1,2,3} and {3,2,1} are equal.
+            </p>
+        </div>
+
+        <!-- ========== Section for Power Set Generation ========== -->
+        <section class="card">
+            <!-- A visual card container for the first tool -->
+            <h2>Power Set Generator</h2>
+            <!-- Subheading for this section -->
+
+            <div class="input-group">
+                <!-- Group to keep the input and button together -->
+                <input id="setInput" type="text" placeholder="Enter elements e.g., {1,2,3}">
+                <!-- Input box where users type their elements -->
+                <button onclick="generatePowerSet()">Generate</button>
+                <!-- Button to call the generatePowerSet() JavaScript function -->
+            </div>
+
+            <div class="result" id="powerSetResult"></div>
+            <!-- Empty area where the power set result will be displayed -->
+        </section>
+
+        <!-- ========== Section for Equality Checking ========== -->
+        <section class="card">
+            <!-- Another card for the second tool -->
+            <h2>Equality Checker</h2>
+            <!-- Subheading for this section -->
+
+            <div class="input-group">
+                <!-- Holds both set inputs and the button -->
+                <input id="setA" type="text" placeholder="Set A e.g., {1,2,3}">
+                <!-- Input field for the first set -->
+                <input id="setB" type="text" placeholder="Set B e.g., {3,2,1}">
+                <!-- Input field for the second set -->
+                <button onclick="checkEquality()">Check</button>
+                <!-- Button that runs the checkEquality() JavaScript function -->
+            </div>
+
+            <div class="result" id="equalityResult"></div>
+            <!-- Empty div where equality check result (true/false) will appear -->
+        </section>
+    </div>
+
+    <!-- ========== JavaScript Section ========== -->
+    <script>
+        // --- Function to generate Power Set ---
+        async function generatePowerSet() {
+            // Get user input from the text field
+            const elements = document.getElementById('setInput').value;
+
+            // Send a POST request to Flask backend at '/powerset'
+            const res = await fetch('/powerset', {
+                method: 'POST',                               // HTTP method
+                headers: {'Content-Type': 'application/json'}, // Tell Flask we're sending JSON data
+                body: JSON.stringify({ elements })             // Convert input into JSON format
+            });
+
+            // Wait for Flask to respond with generated power set
+            const data = await res.json();
+
+            // Display the result by updating the HTML inside powerSetResult div
+            document.getElementById('powerSetResult').innerHTML = 
+                `<h3>Power Set:</h3><p>${JSON.stringify(data.powerset)}</p>`;
+        }
+
+        // --- Function to check Equality of two sets ---
+        async function checkEquality() {
+            // Get user inputs for Set A and Set B
+            const setA = document.getElementById('setA').value;
+            const setB = document.getElementById('setB').value;
+
+            // Send both sets to Flask backend via POST request
+            const res = await fetch('/check', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({ setA, setB })  // Send both sets as JSON
+            });
+
+            // Receive response (true or false)
+            const data = await res.json();
+
+            // Show the result visually with icons for clarity
+            document.getElementById('equalityResult').innerHTML = 
+                `<h3>Result:</h3><p>${data.equal ? "✅ Sets are Equal" : "❌ Sets are Not Equal"}</p>`;
+        }
+    </script>
+
+    <!-- --- Function to toggle visibility of the information box --- -->
+    <script>
+        function toggleInfo() {
+            // Get the info box element by ID
+            const box = document.getElementById('infoBox');
+            
+            // Toggle between hidden (none) and visible (block)
+            box.style.display = box.style.display === 'none' ? 'block' : 'none';
+        }
+    </script>
+
+</body>
+</html>
